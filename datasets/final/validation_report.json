@@ -1,0 +1,75 @@
+{
+  "validation_date": "2026-01-10 00:26:48",
+  "dataset_info": {
+    "total_rows": 4474,
+    "total_columns": 38,
+    "total_cells": 170012,
+    "missing_values": 102302,
+    "missing_percentage": 60.17339952473944
+  },
+  "source_distribution": {
+    "03_mental_health": 3000,
+    "04_stress_level": 1100,
+    "01_sleep_health": 374
+  },
+  "target_distribution": {
+    "1": 1581,
+    "0": 1452,
+    "2": 1441
+  },
+  "complete_features": [
+    "age",
+    "gender",
+    "sleep_quality_norm",
+    "stress_level_norm"
+  ],
+  "partial_features": [
+    "Occupation",
+    "anxiety_level",
+    "basic_needs",
+    "blood_pressure_diastolic",
+    "bmi_category",
+    "breathing_problem",
+    "depression",
+    "diet_type",
+    "environmental_quality_score",
+    "exercise_level",
+    "happiness_score",
+    "headache",
+    "heart_rate",
+    "living_conditions",
+    "mental_health_history",
+    "mental_health_index",
+    "noise_level",
+    "physical_activity",
+    "physical_symptoms_score",
+    "protective_factors_score",
+    "safety",
+    "screen_time",
+    "self_esteem",
+    "sleep_duration",
+    "sleep_hours",
+    "sleep_quality",
+    "sleep_quality_category",
+    "social_interaction",
+    "social_support",
+    "stress_category",
+    "stress_level",
+    "stress_risk_score",
+    "work_hours"
+  ],
+  "validation_results": {
+    "Row Count": true,
+    "Critical Variables Complete": true,
+    "Target Variable Present": true,
+    "Target Variable Balanced": true,
+    "Data Types Consistent": false,
+    "No Empty Columns": true
+  },
+  "data_quality_metrics": {
+    "critical_variables_complete": true,
+    "target_variable_balanced": true,
+    "data_types_consistent": false,
+    "no_empty_columns": true
+  }
+}

@@ -1,0 +1,148 @@
+======================================================================
+UNIFIED DATASET - FINAL SUMMARY
+AI Personal Performance Coach - Main Model Dataset
+======================================================================
+
+Creation Date: 2026-01-10 00:42:52
+
+DATASET OVERVIEW
+----------------------------------------------------------------------
+Total Records: 4,474
+Total Features: 37
+Total Cells: 165,538
+Missing Values: 101,202
+Missing Percentage: 61.14%
+
+SOURCE DATASETS
+----------------------------------------------------------------------
+This unified dataset combines three source datasets:
+
+  01_sleep_health:
+    Rows: 374 (8.36%)
+    Description: Sleep Health & Lifestyle - Sleep patterns, physical activity, health metrics
+
+  03_mental_health:
+    Rows: 3,000 (67.05%)
+    Description: Mental Health & Lifestyle Habits - Work-life balance, general lifestyle factors
+
+  04_stress_level:
+    Rows: 1,100 (24.59%)
+    Description: Stress Level Dataset - Mental health indicators, psychological factors
+
+TARGET VARIABLE
+----------------------------------------------------------------------
+Variable: stress_level_norm
+Type: Categorical (0 = Low, 1 = Medium, 2 = High)
+Distribution:
+  0 (Low   ): 1,452 (32.45%)
+  1 (Medium): 1,581 (35.34%)
+  2 (High  ): 1,441 (32.21%)
+
+----------------------------------------------------------------------
+Total: 4 features with no missing values
+
+   1. age                                 [int64]
+   2. gender                              [object]
+   3. sleep_quality_norm                  [float64]
+   4. stress_level_norm                   [int64]
+
+PARTIAL FEATURES (Require Handling)
+----------------------------------------------------------------------
+Total: 32 features with missing values
+
+   1. Occupation                          [object    ] 91.64% missing
+   2. sleep_duration                      [float64   ] 91.64% missing
+   3. sleep_quality                       [float64   ] 91.64% missing
+   4. physical_activity                   [float64   ] 91.64% missing
+   5. bmi_category                        [object    ] 91.64% missing
+   6. heart_rate                          [float64   ] 91.64% missing
+   7. blood_pressure_diastolic            [float64   ] 91.64% missing
+   8. sleep_quality_category              [object    ] 91.64% missing
+   9. stress_category                     [object    ] 91.64% missing
+  10. anxiety_level                       [float64   ] 75.41% missing
+  11. self_esteem                         [float64   ] 75.41% missing
+  12. depression                          [float64   ] 75.41% missing
+  13. mental_health_history               [float64   ] 75.41% missing
+  14. headache                            [float64   ] 75.41% missing
+  15. breathing_problem                   [float64   ] 75.41% missing
+  16. noise_level                         [float64   ] 75.41% missing
+  17. living_conditions                   [float64   ] 75.41% missing
+  18. safety                              [float64   ] 75.41% missing
+  19. basic_needs                         [float64   ] 75.41% missing
+  20. mental_health_index                 [float64   ] 75.41% missing
+  21. protective_factors_score            [float64   ] 75.41% missing
+  22. stress_risk_score                   [float64   ] 75.41% missing
+  23. environmental_quality_score         [float64   ] 75.41% missing
+  24. physical_symptoms_score             [float64   ] 75.41% missing
+  25. social_support                      [float64   ] 75.41% missing
+  26. exercise_level                      [object    ] 32.95% missing
+  27. diet_type                           [object    ] 32.95% missing
+  28. sleep_hours                         [float64   ] 32.95% missing
+  29. work_hours                          [float64   ] 32.95% missing
+  30. screen_time                         [float64   ] 32.95% missing
+  31. social_interaction                  [float64   ] 32.95% missing
+  32. happiness_score                     [float64   ] 32.95% missing
+
+METADATA COLUMNS
+----------------------------------------------------------------------
+  • dataset_source: Identifies the source dataset for each record
+
+DATA TRANSFORMATIONS APPLIED
+----------------------------------------------------------------------
+1. Variable Normalization:
+   • Age: Normalized to consistent format across all datasets
+   • Gender: Standardized to 'Male', 'Female', 'Other'
+   • Sleep Quality: Normalized to 0-1 scale (sleep_quality_norm)
+   • Stress Level: Normalized to 0-2 scale (stress_level_norm)
+
+2. Feature Engineering:
+   • Created normalized versions of key variables
+   • Added dataset_source identifier
+   • Preserved original features where conceptually different
+
+3. Data Cleaning:
+   • Removed redundant columns (stress_level_numeric, sleep_hours_original)
+   • Removed duplicate normalized columns (sleep_quality from Dataset 04)
+   • Fixed data type inconsistencies (removed stress_level with mixed types)
+   • Converted age to consistent int64 type
+
+4. Merge Strategy:
+   • Vertical concatenation (preserves all rows)
+   • Missing values expected in dataset-specific columns
+   • Common variables normalized before merge
+
+VALIDATION STATUS
+----------------------------------------------------------------------
+  Row Count                     : PASSED
+  Critical Variables Complete   : PASSED
+  Target Variable Present       : PASSED
+  Data Types Consistent         : PASSED
+  No Empty Columns              : PASSED
+  stress_level_removed          : PASSED
+
+RECOMMENDATIONS FOR MODELING
+----------------------------------------------------------------------
+1. Feature Selection:
+   • Use complete features for baseline models
+   • Consider imputation strategies for partial features
+   • Exclude 'dataset_source' from model features (metadata only)
+
+2. Missing Value Handling:
+   • Complete features: No action needed
+   • Partial features: Apply imputation (mean/median/mode) or ML-based imputation
+   • Consider creating missing value indicator variables
+
+3. Data Preprocessing:
+   • Scale numeric features (StandardScaler or MinMaxScaler)
+   • Encode categorical variables (One-Hot Encoding or Label Encoding)
+   • Consider feature selection if dimensionality is an issue
+
+4. Model Considerations:
+   • Target is well-balanced (32-35% per class)
+   • Can use standard classification metrics (accuracy, precision, recall, F1)
+   • Consider stratified train/test split
+   • Handle class imbalance if it appears in subsets
+
+======================================================================
+END OF SUMMARY
+======================================================================

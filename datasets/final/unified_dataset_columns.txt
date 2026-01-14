@@ -1,0 +1,44 @@
+UNIFIED DATASET - COLUMN REFERENCE
+======================================================================
+
+Total Columns: 37
+
+ALL COLUMNS WITH DATA TYPES
+----------------------------------------------------------------------
+ 1. Occupation                          [object    ] - 91.6% missing
+ 2. age                                 [int64     ] - Complete
+ 3. anxiety_level                       [float64   ] - 75.4% missing
+ 4. basic_needs                         [float64   ] - 75.4% missing
+ 5. blood_pressure_diastolic            [float64   ] - 91.6% missing
+ 6. bmi_category                        [object    ] - 91.6% missing
+ 7. breathing_problem                   [float64   ] - 75.4% missing
+ 8. dataset_source                      [object    ] - Complete
+ 9. depression                          [float64   ] - 75.4% missing
+10. diet_type                           [object    ] - 32.9% missing
+11. environmental_quality_score         [float64   ] - 75.4% missing
+12. exercise_level                      [object    ] - 32.9% missing
+13. gender                              [object    ] - Complete
+14. happiness_score                     [float64   ] - 32.9% missing
+15. headache                            [float64   ] - 75.4% missing
+16. heart_rate                          [float64   ] - 91.6% missing
+17. living_conditions                   [float64   ] - 75.4% missing
+18. mental_health_history               [float64   ] - 75.4% missing
+19. mental_health_index                 [float64   ] - 75.4% missing
+20. noise_level                         [float64   ] - 75.4% missing
+21. physical_activity                   [float64   ] - 91.6% missing
+22. physical_symptoms_score             [float64   ] - 75.4% missing
+23. protective_factors_score            [float64   ] - 75.4% missing
+24. safety                              [float64   ] - 75.4% missing
+25. screen_time                         [float64   ] - 32.9% missing
+26. self_esteem                         [float64   ] - 75.4% missing
+27. sleep_duration                      [float64   ] - 91.6% missing
+28. sleep_hours                         [float64   ] - 32.9% missing
+29. sleep_quality                       [float64   ] - 91.6% missing
+30. sleep_quality_category              [object    ] - 91.6% missing
+31. sleep_quality_norm                  [float64   ] - Complete
+32. social_interaction                  [float64   ] - 32.9% missing
+33. social_support                      [float64   ] - 75.4% missing
+34. stress_category                     [object    ] - 91.6% missing
+35. stress_level_norm                   [int64     ] - Complete
+36. stress_risk_score                   [float64   ] - 75.4% missing
+37. work_hours                          [float64   ] - 32.9% missing

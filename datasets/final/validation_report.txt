@@ -1,0 +1,84 @@
+======================================================================
+UNIFIED DATASET VALIDATION REPORT
+======================================================================
+
+Validation Date: 2026-01-10 00:26:48
+
+DATASET INFORMATION
+----------------------------------------------------------------------
+Total Rows: 4,474
+Total Columns: 38
+Total Cells: 170,012
+Missing Values: 102,302
+Missing Percentage: 60.17339952473944
+
+SOURCE DISTRIBUTION
+----------------------------------------------------------------------
+03_mental_health    : 3,000 (67.05%)
+04_stress_level     : 1,100 (24.59%)
+01_sleep_health     :   374 ( 8.36%)
+
+TARGET DISTRIBUTION
+----------------------------------------------------------------------
+0 (Low   ): 1,452 (32.45%)
+1 (Medium): 1,581 (35.34%)
+2 (High  ): 1,441 (32.21%)
+
+VALIDATION RESULTS
+----------------------------------------------------------------------
+Row Count                     : PASSED
+Critical Variables Complete   : PASSED
+Target Variable Present       : PASSED
+Target Variable Balanced      : PASSED
+Data Types Consistent         : FAILED
+No Empty Columns              : PASSED
+
+DATA QUALITY METRICS
+----------------------------------------------------------------------
+Critical Variables Complete   : YES
+Target Variable Balanced      : YES
+Data Types Consistent         : NO
+No Empty Columns              : YES
+
+COMPLETE FEATURES (4)
+----------------------------------------------------------------------
+ 1. age
+ 2. gender
+ 3. sleep_quality_norm
+ 4. stress_level_norm
+
+PARTIAL FEATURES (33)
+----------------------------------------------------------------------
+ 1. Occupation                          (91.64% missing)
+ 2. anxiety_level                       (75.41% missing)
+ 3. basic_needs                         (75.41% missing)
+ 4. blood_pressure_diastolic            (91.64% missing)
+ 5. bmi_category                        (91.64% missing)
+ 6. breathing_problem                   (75.41% missing)
+ 7. depression                          (75.41% missing)
+ 8. diet_type                           (32.95% missing)
+ 9. environmental_quality_score         (75.41% missing)
+10. exercise_level                      (32.95% missing)
+11. happiness_score                     (32.95% missing)
+12. headache                            (75.41% missing)
+13. heart_rate                          (91.64% missing)
+14. living_conditions                   (75.41% missing)
+15. mental_health_history               (75.41% missing)
+16. mental_health_index                 (75.41% missing)
+17. noise_level                         (75.41% missing)
+18. physical_activity                   (91.64% missing)
+19. physical_symptoms_score             (75.41% missing)
+20. protective_factors_score            (75.41% missing)
+21. safety                              (75.41% missing)
+22. screen_time                         (32.95% missing)
+23. self_esteem                         (75.41% missing)
+24. sleep_duration                      (91.64% missing)
+25. sleep_hours                         (32.95% missing)
+26. sleep_quality                       (91.64% missing)
+27. sleep_quality_category              (91.64% missing)
+28. social_interaction                  (32.95% missing)
+29. social_support                      (75.41% missing)
+30. stress_category                     (91.64% missing)
+31. stress_level                        (24.59% missing)
+32. stress_risk_score                   (75.41% missing)
+33. work_hours                          (32.95% missing)
