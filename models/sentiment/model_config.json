@@ -1,0 +1,33 @@
+{
+    "best_model_name": "RandomForest",
+    "best_model_metrics": {
+        "test_accuracy": 0.7649769585253456,
+        "test_f1_weighted": 0.7658763145121857,
+        "test_f1_macro": 0.7823867364026188,
+        "cv_mean_weighted": 0.6796843022988314,
+        "cv_std_weighted": 0.011348339635873495,
+        "cv_mean_macro": 0.6972904365772115,
+        "cv_std_macro": 0.010442931216686763
+    },
+    "emotion_labels": [
+        "joyful",
+        "mad",
+        "peaceful",
+        "powerful",
+        "sad",
+        "scared"
+    ],
+    "vectorizer_params": {
+        "max_features": 5000,
+        "min_df": 2,
+        "max_df": 0.95,
+        "ngram_range": [
+            1,
+            2
+        ]
+    },
+    "training_date": "2026-01-19T23:06:36.125121",
+    "random_state": 42,
+    "n_train_samples": 1752,
+    "n_test_samples": 434
+}
