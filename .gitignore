@@ -40,14 +40,19 @@ ENV/
 # ============================================
 # Modelos entrenados (archivos grandes)
 # ============================================
-models/*.pkl
-models/*.h5
-models/*.joblib
-models/*.pt
-models/*.pth
+# Ignorar todos los modelos en cualquier subdirectorio
+models/**/*.pkl
+models/**/*.h5
+models/**/*.joblib
+models/**/*.pt
+models/**/*.pth
 
 # Mantener estructura pero no los archivos grandes
 !models/.gitkeep
+
+# Mantener archivos de configuración (pequeños y útiles)
+!models/**/model_config.json
+!models/**/*.json
 
 # ============================================
 # Datos (archivos grandes)
@@ -112,3 +117,4 @@ desktop.ini
 .env.local
 config.local.py
 secrets.json
+
