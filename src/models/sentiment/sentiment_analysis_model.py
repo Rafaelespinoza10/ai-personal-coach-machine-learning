@@ -711,6 +711,15 @@ if best_model_name in ['MLP', 'XGBoost']:
 else:
     print(" Best model does not use encoded labels, so no label encoder is saved.")
 
+# Always save LinearSVC model for explainability (coef_ extraction)
+if 'LinearSVC' in models:
+    linearsvc_path = SENTIMENT_MODELS_DIR / 'linearsvc_model.pkl'
+    with open(linearsvc_path, 'wb') as f:
+        pickle.dump(models['LinearSVC'], f)
+    print(f" LinearSVC model saved (for explainability): {linearsvc_path}")
+else:
+    print("  LinearSVC model not found, skipping explainability model save")
+
 # save model metadata and configuration
 model_config = {
     'best_model_name': best_model_name,
