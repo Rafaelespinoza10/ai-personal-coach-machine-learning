@@ -40,44 +40,41 @@ ENV/
 # ============================================
 # Modelos entrenados (archivos grandes)
 # ============================================
-# Ignorar todos los modelos en cualquier subdirectorio
+# Ignorar todos los modelos binarios y archivos grandes
 models/**/*.pkl
 models/**/*.h5
 models/**/*.joblib
 models/**/*.pt
 models/**/*.pth
+models/**/*.png
+
+# Ignorar JSON excepto model_config.json (pequeños y útiles)
 models/**/*.json
-
-# Mantener estructura pero no los archivos grandes
-!models/.gitkeep
-
-# Mantener archivos de configuración (pequeños y útiles)
 !models/**/model_config.json
-!models/**/*.json
+
+# Ignorar resultados de entrenamiento específicos
+models/training_results.json
+models/sentiment/model_config.json
+models/shap_analysis/
 
 # ============================================
 # Datos (archivos grandes)
 # ============================================
-# Excluir datasets raw y processed (muy grandes)
-datasets/raw/*.csv
-datasets/processed/*.csv
-datasets/final/*.csv
+# Excluir datasets CSV (muy grandes)
+datasets/**/*.csv
 
-# Mantener estructura
-!datasets/raw/.gitkeep
-!datasets/processed/.gitkeep
-!datasets/final/.gitkeep
-
-# Mantener archivos de documentación
-!datasets/final/*.txt
-!datasets/final/*.json
+# Mantener archivos de documentación y metadata
+!datasets/**/*.txt
+!datasets/**/*.json
 
 # ============================================
-# Resultados y visualizaciones generadas
+# Testing y Coverage
 # ============================================
-models/shap_analysis/
-models/training_results.json
-models/sentiment/model_config.json
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
 
 # ============================================
 # Archivos del sistema
@@ -92,16 +89,24 @@ Thumbs.db
 desktop.ini
 
 # ============================================
-# IDEs
+# IDEs y Editores
 # ============================================
 .vscode/
 .idea/
+.cursor/
 *.swp
 *.swo
 *~
 .project
 .pydevproject
 .settings/
+
+# ============================================
+# Type Checking
+# ============================================
+.mypy_cache/
+.dmypy.json
+dmypy.json
 
 # ============================================
 # Logs y temporales
@@ -111,6 +116,12 @@ desktop.ini
 *.temp
 *.bak
 *.cache
+
+# ============================================
+# Python Version Management
+# ============================================
+.python-version
+.tool-versions
 
 # ============================================
 # Archivos de configuración local
