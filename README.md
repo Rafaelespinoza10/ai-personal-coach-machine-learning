@@ -1,228 +1,227 @@
 # 🤖 AI Personal Performance Coach
 
-Sistema de inteligencia artificial que analiza hábitos, rutinas y productividad para predecir fatiga, bajo rendimiento y riesgo de burnout, ofreciendo recomendaciones personalizadas para mejorar el bienestar y rendimiento.
+Sistema de IA que analiza hábitos, rutinas y productividad para predecir fatiga, bajo rendimiento y riesgo de burnout. Incluye **análisis de sentimiento**, **indicadores de salud mental** (uso de redes sociales) y **nivel de estrés**, con recomendaciones y metadatos para apps (títulos, colores, iconos).
 
 ## 📋 Tabla de Contenidos
 
 - [Características](#-características)
-- [Arquitectura del Proyecto](#-arquitectura-del-proyecto)
-- [Requisitos](#-requisitos)
-- [Instalación](#-instalación)
+- [API REST](#-api-rest)
+- [Arquitectura](#-arquitectura)
+- [Requisitos e instalación](#-requisitos-e-instalación)
 - [Uso](#-uso)
-- [Resultados](#-resultados)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [Modelos Implementados](#-modelos-implementados)
-- [Análisis SHAP](#-análisis-shap)
-- [Feature Engineering](#-feature-engineering)
-- [Próximos Pasos](#-próximos-pasos)
-- [Contribuciones](#-contribuciones)
+- [Modelos y entrenamiento](#-modelos-y-entrenamiento)
+- [Estructura del proyecto](#-estructura-del-proyecto)
+- [Próximos pasos](#-próximos-pasos)
 
 ## ✨ Características
 
-- **Análisis Multidimensional**: Integra datos de sueño, actividad física, estado emocional, salud mental y niveles de estrés
-- **Predicción Binaria**: Clasifica el nivel de estrés como "Low" o "Medium+High" para facilitar la interpretación
-- **Feature Engineering**: Crea features compuestas que mejoran la capacidad predictiva del modelo
-- **Feature Selection**: Selecciona automáticamente las top 10 features más importantes
-- **Explicabilidad**: Utiliza SHAP (SHapley Additive exPlanations) para explicar las predicciones del modelo
-- **Pipeline Completo**: Desde EDA hasta entrenamiento y análisis de modelos
+- **API REST (FastAPI)**: Endpoints para predicciones en tiempo real.
+- **Análisis de sentimiento**: Clasificación de emociones en texto (joyful, sad, scared, peaceful, mad, powerful) con explicaciones, palabras clave y metadatos para UI.
+- **Salud mental**: Predicción de indicadores (depresión, sueño, distracción, preocupación, concentración) a partir de uso de redes sociales. Respuesta con interpretaciones, severidad y recomendaciones.
+- **Estrés**: Clasificación binaria Low vs Medium+High con mensajes y recomendaciones adaptadas a la probabilidad.
+- **Feature engineering**: Features compuestas para el modelo de estrés (health stress index, sleep efficiency, etc.).
+- **Pipeline completo**: EDA en notebooks, entrenamiento en `src/models/`, API en `backend/`.
 
-## 🏗️ Arquitectura del Proyecto
+## 🚀 API REST
+
+### Levantar la API
+
+Desde la raíz del proyecto, con el entorno activado:
+
+```bash
+cd backend
+uvicorn main:app --reload
+```
+
+La API corre en `http://localhost:8000`. Documentación interactiva: `http://localhost:8000/docs`.
+
+### Endpoints
+
+| Método | Ruta | Descripción |
+|--------|------|-------------|
+| `GET` | `/` | Health check |
+| `POST` | `/sentiment/analyze` | Análisis de emoción en texto |
+| `POST` | `/mental-health/predict` | Indicadores de salud mental (uso redes sociales) |
+| `POST` | `/stress/predict` | Nivel de estrés (Low / Medium+High) |
+
+### Ejemplos de uso
+
+**1. Sentimiento** — `POST /sentiment/analyze`
+
+```json
+{ "text": "Hoy me siento muy bien, todo salió increíble" }
+```
+
+Respuesta: `predicted_emotion`, `confidence`, `explanation`, `key_words`, `all_emotions_scores`, `display_metadata` (title, color, icon).
+
+**2. Salud mental** — `POST /mental-health/predict`
+
+```json
+{
+  "age": 25,
+  "gender": "Male",
+  "relationship_status": "Single",
+  "occupation_status": "University Student",
+  "organization": null,
+  "platforms": "Facebook, Instagram, YouTube",
+  "daily_usage_time": "Between 2 and 3 hours",
+  "daily_usage_hours": 2.5,
+  "num_platforms": 3,
+  "usage_without_purpose": 3,
+  "distraction_level": 2,
+  "restlessness": 2,
+  "social_comparison": 2,
+  "comparison_feelings": 1,
+  "validation_seeking": 2,
+  "interest_fluctuation": 2,
+  "social_media_addiction_score": null,
+  "mental_health_risk_score": null,
+  "digital_wellbeing_score": null
+}
+```
+
+Respuesta: scores por indicador, `indicators` (interpretación por indicador), `overall_assessment`, `overall_severity`, `priority_areas`, `general_recommendations`.
+
+**3. Estrés** — `POST /stress/predict`
+
+```json
+{
+  "features": {
+    "age": 30,
+    "gender": "Male",
+    "sleep_quality_norm": 0.7,
+    "sleep_quality": 6,
+    "sleep_duration": 7,
+    "physical_activity": 4,
+    "heart_rate": 72,
+    "Occupation": "Engineer",
+    "diet_type": "Balanced",
+    "exercise_level": "Moderate"
+  }
+}
+```
+
+Las claves de `features` deben coincidir con las columnas base del dataset unificado (sin `dataset_source` ni `stress_level_norm`). Respuesta: `stress_level`, `probability`, `binary_class`, `message`, `recommendation`, `display_metadata`.
+
+## 🏗️ Arquitectura
 
 ```
 ai_personal_performance_coach/
+├── backend/                 # API FastAPI
+│   ├── main.py              # App y routers
+│   ├── models_loader.py     # Carga de modelos (.pkl, configs)
+│   ├── schemas.py           # Pydantic (request/response)
+│   ├── controllers/         # Rutas por servicio
+│   ├── services/            # Lógica (sentiment, health, stress)
+│   └── helpers/             # Stopwords, keywords, etc.
+├── src/
+│   ├── models/              # Entrenamiento
+│   │   ├── main/            # Modelo estrés (unified dataset)
+│   │   ├── mental_health/   # Salud mental (redes sociales)
+│   │   ├── sentiment/       # Análisis de emociones
+│   │   └── analysis/        # SHAP
+│   └── utils/               # preprocessing, constants, etc.
+├── models/                  # Artefactos guardados
+│   ├── mental_health/       # model_config, (pkl en .gitignore)
+│   ├── sentiment/           # config, (pkl en .gitignore)
+│   └── preprocessors.pkl    # Para stress (si use_selected=False)
 ├── datasets/
-│   ├── raw/              # Datasets originales
-│   ├── processed/        # Datasets limpiados
-│   └── final/            # Dataset unificado
-├── models/               # Modelos entrenados y resultados
-│   └── shap_analysis/    # Visualizaciones SHAP
-├── notebooks/            # Análisis exploratorio (EDA)
-│   ├── 01_main_model_data_integration.ipynb
-│   ├── 02_EDA_sleep_health.ipynb
-│   ├── 03_EDA_emotional_monitoring_dataset.ipynb
-│   ├── 04_EDA_mental_health_lifestyle_dataset.ipynb
-│   └── 05_EDA_stress_level_dataset.ipynb
-└── src/
-    ├── models/
-    │   ├── main/
-    │   │   └── main_model.py      # Script de entrenamiento
-    │   └── analysis/
-    │       └── shap_analysis.py   # Análisis SHAP
-    └── utils/
-        ├── constants.py           # Constantes del proyecto
-        ├── functions.py           # Funciones utilitarias
-        └── __init__.py            # Barrel file
+│   └── final/               # Unified dataset, metadata, validación
+└── notebooks/               # EDA e integración
 ```
 
-## 📦 Requisitos
+## 📦 Requisitos e instalación
 
-- Python 3.8+
-- pandas
-- numpy
-- scikit-learn
-- xgboost (opcional, pero recomendado)
-- shap (para análisis de explicabilidad)
-- matplotlib
-- seaborn
-- jupyter (para notebooks)
+- **Python 3.8+**
+- **Dependencias**: `pandas`, `numpy`, `scikit-learn`, `xgboost`, `fastapi`, `uvicorn`, `pydantic`. Opcional: `shap`, `matplotlib`, `seaborn`, `jupyter` para EDA y SHAP.
 
-## 🚀 Instalación
-
-1. **Clonar el repositorio**
 ```bash
 git clone https://github.com/tu-usuario/ai_personal_performance_coach.git
 cd ai_personal_performance_coach
-```
-
-2. **Crear entorno virtual (recomendado)**
-```bash
 python -m venv venv
-source venv/bin/activate  # En Windows: venv\Scripts\activate
-```
-
-3. **Instalar dependencias**
-```bash
-pip install pandas numpy scikit-learn xgboost shap matplotlib seaborn jupyter
+# Windows: venv\Scripts\activate
+# Linux/macOS: source venv/bin/activate
+pip install pandas numpy scikit-learn xgboost fastapi uvicorn pydantic
 ```
 
 ## 💻 Uso
 
-### 1. Preparar los Datos
+### 1. Entrenar modelos
 
-Coloca tus datasets en `datasets/raw/`:
-- `01_sleep_health_lifestyle.csv`
-- `02_emotional_monitoring_dataset_with_target.csv`
-- `03_mental_health_lifestyle.csv`
-- `04_stress_level_dataset.csv`
+Los artefactos (`.pkl`, `scaler`, `preprocessors`, etc.) se guardan en `models/`. Si no existen, entrena primero:
 
-### 2. Análisis Exploratorio (EDA)
+- **Estrés (main)**  
+  Dataset unificado en `datasets/final/01_unified_dataset.csv`.  
+  ```bash
+  python -m src.models.main.main_model
+  ```  
+  Con `use_selected=False` se genera `models/preprocessors.pkl`, requerido por la API de estrés.
 
-Ejecuta los notebooks en orden:
-1. `01_main_model_data_integration.ipynb` - Integración de datasets
-2. `02_EDA_sleep_health.ipynb` - Análisis de datos de sueño
-3. `03_EDA_emotional_monitoring_dataset.ipynb` - Análisis emocional
-4. `04_EDA_mental_health_lifestyle_dataset.ipynb` - Análisis de salud mental
-5. `05_EDA_stress_level_dataset.ipynb` - Análisis de niveles de estrés
+- **Salud mental**  
+  ```bash
+  python -m src.models.mental_health.mental_health_model
+  ```  
+  Genera `models/mental_health/` (modelo, scaler, selected_features, preprocessors, config).
 
-### 3. Entrenar el Modelo
+- **Sentimiento**  
+  ```bash
+  python -m src.models.sentiment.sentiment_analysis_model
+  ```  
+  Genera `models/sentiment/` (model_explainer, config, etc.).
 
-```bash
-python src/models/main/main_model.py
-```
-
-Este script:
-- Aplica feature engineering
-- Entrena múltiples modelos (Random Forest, Gradient Boosting, SVM, Neural Network, XGBoost)
-- Selecciona las top 10 features más importantes
-- Re-entrena con features seleccionadas
-- Guarda el mejor modelo en `models/best_model.pkl`
-
-### 4. Análisis SHAP (Explicabilidad)
+### 2. Ejecutar la API
 
 ```bash
-python src/models/analysis/shap_analysis.py
+cd backend
+uvicorn main:app --reload
 ```
 
-Genera visualizaciones en `models/shap_analysis/`:
-- `shap_summary_bar.png` - Importancia de features
-- `shap_summary_dot.png` - Distribución de SHAP values
-- `shap_waterfall_instance0.png` - Explicación de una instancia
-- `shap_feature_importance.csv` - Tabla de importancia
-- `shap_force_plot_instance*.html` - Gráficos interactivos
+Prueba los endpoints con Postman, `curl` o la UI en `/docs`.
 
-## 📊 Resultados
+### 3. EDA y análisis
 
-### Mejor Modelo: SVM (Support Vector Machine)
+Notebooks en `notebooks/` (integración, EDA por dataset, sentiment, salud mental). SHAP en `src/models/analysis/shap_analysis.py`.
 
-**Métricas de Rendimiento:**
-- **Test Accuracy**: 76.4%
-- **Test F1 Score**: 85.2%
-- **Test Precision**: 74.1%
-- **Test Recall**: 100.0%
-- **CV Accuracy**: 75.6% (±0.5%)
+## 🧠 Modelos y entrenamiento
 
-**Clasificación Binaria:**
-- **Clase 0 (Low)**: Bajo nivel de estrés
-- **Clase 1 (Medium+High)**: Nivel de estrés medio o alto
+| Modelo | Salida | Uso en API |
+|--------|--------|------------|
+| **Sentiment** | Emoción (6 clases) | `/sentiment/analyze` |
+| **Mental health** | 5 indicadores (depresión, sueño, distracción, preocupación, concentración) | `/mental-health/predict` |
+| **Stress (main)** | Binario Low / Medium+High | `/stress/predict` |
 
-### Comparación de Modelos
+- **Estrés**: SVM (u otro según `training_results.json`), sobre dataset unificado + feature engineering. Requiere `preprocessors.pkl` si usas all-features.
+- **Salud mental**: XGBoost multi-output, preprocesamiento con OHE e imputers guardados.
+- **Sentimiento**: RandomForest + LinearSVC (explicador), TF-IDF, keywords y override por confianza baja.
 
-| Modelo | Test Accuracy | F1 Score | CV Mean |
-|--------|--------------|----------|---------|
-| **SVM** | **76.4%** | **85.2%** | **75.6%** |
-| Random Forest | 76.2% | 85.0% | 75.6% |
-| Gradient Boosting | 76.0% | 84.8% | 75.5% |
-| XGBoost | 75.7% | 84.7% | 75.3% |
-| Neural Network | 75.1% | 84.2% | 75.0% |
+## 📁 Estructura del proyecto
 
-## 🔍 Análisis SHAP
+- `backend/`: API, carga de modelos, controllers, services, schemas.
+- `src/models/`: Scripts de entrenamiento (main, mental_health, sentiment, analysis).
+- `src/utils/`: `preprocess_data`, `engineer_features`, constantes, etc.
+- `models/`: Configs y, si corres entrenamiento, artefactos (.pkl). Los `.pkl` y otros binarios suelen estar en `.gitignore`.
+- `datasets/final/`: Dataset unificado, columnas, resúmenes, validación.
+- `notebooks/`: EDA e integración de datos.
 
-El análisis SHAP revela las features más importantes para predecir el nivel de estrés. Las visualizaciones generadas muestran:
+## 🎯 Próximos pasos
 
-- **Importancia de Features**: Qué variables tienen mayor impacto en las predicciones
-- **Distribución de SHAP Values**: Cómo cada feature afecta las predicciones
-- **Explicaciones Individuales**: Por qué el modelo predice un nivel de estrés específico para cada instancia
-
-**Top Features (por importancia SHAP):**
-1. `stress_level` - Nivel de estrés reportado
-2. `sleep_quality` - Calidad del sueño
-3. `physical_activity` - Nivel de actividad física
-4. `heart_rate` - Frecuencia cardíaca
-5. `cortisol_level` - Nivel de cortisol
-6. Features engineered (ratios e interacciones)
-
-## 🧪 Modelos Implementados
-
-1. **Random Forest** - Ensemble de árboles de decisión
-2. **Gradient Boosting** - Boosting secuencial
-3. **SVM (RBF Kernel)** - Support Vector Machine con kernel RBF ⭐ Mejor modelo
-4. **Neural Network (MLP)** - Perceptrón multicapa
-5. **XGBoost** - Gradient boosting optimizado
-
-## 📈 Feature Engineering
-
-El proyecto incluye creación automática de features compuestas:
-
-- **Health Stress Index**: `sleep_quality - physical_activity / 10`
-- **Sleep Efficiency**: `sleep_quality / (sleep_duration + 1)`
-- **HR Activity Ratio**: `heart_rate / (physical_activity + 1)`
-- **Stress Activity Balance**: `stress_level / (physical_activity + 1)`
-- **Sleep Stress Interaction**: `sleep_quality * stress_level`
-- **Physiological Stress Score**: `cortisol_level * 10 + heart_rate / 10`
-
-## 🎯 Próximos Pasos
-
-- [ ] Implementar API REST para predicciones en tiempo real
-- [ ] Agregar análisis de series temporales para predicción de tendencias
-- [ ] Integrar procesamiento de texto para análisis de diarios emocionales
-- [ ] Crear dashboard interactivo para visualización de resultados
-- [ ] Implementar sistema de recomendaciones personalizadas
-- [ ] Agregar tests unitarios y de integración
-- [ ] Documentación de API con Swagger/OpenAPI
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature (`git checkout -b feature/AmazingFeature`)
-3. Commit tus cambios (`git commit -m 'Add some AmazingFeature'`)
-4. Push a la rama (`git push origin feature/AmazingFeature`)
-5. Abre un Pull Request
+- [ ] Cliente Flutter/móvil para consumir la API
+- [ ] Tests unitarios y de integración para la API
+- [ ] CI/CD (entrenamiento + despliegue)
+- [ ] Dashboard para métricas y predicciones
+- [ ] Series temporales o tendencias de bienestar
 
 ## 📝 Notas
 
-- Los datasets grandes (CSV) y modelos entrenados (PKL) están excluidos del repositorio por tamaño
-- Los modelos se pueden regenerar ejecutando `main_model.py`
-- Los resultados de entrenamiento se guardan en `models/training_results.json`
+- Los CSV grandes y los `.pkl` de modelos suelen estar en `.gitignore`. Regenera modelos con los scripts de `src/models/`.
+- Para `/stress/predict` hace falta `models/preprocessors.pkl` (entrenar main model con `use_selected=False`).
+- Variables de entorno sensibles (`.env`) no se versionan.
 
 ## 📄 Licencia
 
-Este proyecto está bajo la Licencia MIT - ver el archivo LICENSE para más detalles.
+Este proyecto está bajo la Licencia MIT.
 
 ---
 
-**Desarrollado por el Ingeniero Alejandro Rafael Moreno Espinoza**
-
-*Desarrollado con ❤️ para mejorar el bienestar y rendimiento personal*
-
+**Desarrollado por el Ing. Alejandro Rafael Moreno Espinoza**  
+*Hecho para mejorar bienestar y rendimiento personal*
