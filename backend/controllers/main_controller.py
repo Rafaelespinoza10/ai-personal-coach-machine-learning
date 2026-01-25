@@ -1,8 +1,8 @@
 
 from fastapi import APIRouter, HTTPException
-from schemas import StressRequest, StressResponse
-from models_loader import model_server
-import services.stress_service as stress_service
+from backend.schemas import StressRequest, StressResponse
+from backend.models_loader import model_server
+from backend.services import stress_service
 
 router = APIRouter(prefix="/stress", tags=["Stress"])
 

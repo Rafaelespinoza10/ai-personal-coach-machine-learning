@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from schemas import SentimentRequest, SentimentResponse
-from models_loader import model_server
-import services.sentiment_service as sentiment_service
+from backend.schemas import SentimentRequest, SentimentResponse
+from backend.models_loader import model_server
+from backend.services import sentiment_service
 
 router = APIRouter(prefix="/sentiment", tags=["Sentiment"])
 

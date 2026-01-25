@@ -1,7 +1,7 @@
 import re
 import numpy as np
 import pandas as pd
-from helpers.stop_words_sentiment_helper import EMOTION_ROOTS, STRONG_KEYWORDS, spanish_stopwords, stemmer, EMOTION_STYLES
+from backend.helpers.stop_words_sentiment_helper import EMOTION_ROOTS, STRONG_KEYWORDS, spanish_stopwords, stemmer, EMOTION_STYLES
 
 def clean_text(text: str) -> str:
     """Limpia el texto, elimina stopwords y aplica stemming."""

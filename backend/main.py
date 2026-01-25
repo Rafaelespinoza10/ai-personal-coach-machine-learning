@@ -1,6 +1,6 @@
 from fastapi import FastAPI
-from models_loader import model_server
-from controllers import sentiment_controller, health_controller, main_controller
+from backend.models_loader import model_server
+from backend.controllers import sentiment_controller, health_controller, main_controller
 
 app = FastAPI(title="AI Performance Coach API")
 

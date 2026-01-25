@@ -1,7 +1,7 @@
 from fastapi import APIRouter, HTTPException
-from schemas import MentalHealthRequest, MentalHealthResponse
-from models_loader import model_server
-import services.health_service as health_service
+from backend.schemas import MentalHealthRequest, MentalHealthResponse
+from backend.models_loader import model_server
+from backend.services import health_service
 
 router = APIRouter(prefix="/mental-health", tags=["Mental Health"])
 
