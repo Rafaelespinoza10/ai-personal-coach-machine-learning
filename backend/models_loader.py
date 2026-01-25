@@ -1,9 +1,20 @@
-# src/backend/models_loader.py
 import pickle
 import json
 from pathlib import Path
 
-MODELS_PATH = Path(__file__).resolve().parent.parent / "models"
+def get_models_path():
+    """Detecta el path correcto para los modelos según el entorno"""
+    docker_path = Path("/app/models")
+    if docker_path.exists():
+        return docker_path
+    
+    script_dir = Path(__file__).resolve().parent
+    project_root = script_dir.parent
+    local_path = project_root / "models"
+    return local_path
+
+MODELS_PATH = get_models_path()
+
 class ModelServer:
     def __init__(self):
         self.sentiment = None     
