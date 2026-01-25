@@ -10,6 +10,8 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 from sklearn.model_selection import StratifiedKFold
 from sklearn.model_selection import cross_val_score
+import matplotlib.pyplot as plt
+import seaborn as sns
 
 def load_data(file_path):
     """
@@ -28,82 +30,91 @@ def load_data(file_path):
     return df
 
 
-def preprocess_data(X_train: pd.DataFrame, X_test: pd.DataFrame, scale: bool = True) -> tuple[pd.DataFrame, pd.DataFrame]:
-    """ 
-    Preprocess features: handle missing values, encode, scale
+def preprocess_data(
+    X_train: pd.DataFrame,
+    X_test: pd.DataFrame,
+    scale: bool = True,
+    return_preprocessors: bool = False,
+):
+    """
+    Preprocess features: handle missing values, encode, scale.
     Args:
-        X_train: pd.DataFrame, training data
-        X_test: pd.DataFrame, test data
-        scale: bool, whether to scale the data
+        X_train: training data
+        X_test: test data
+        scale: whether to scale the data
+        return_preprocessors: if True, also return fitted imputers and OHE for inference
     Returns:
-        X_train_processed: pd.DataFrame, training data processed
-        X_test_processed: pd.DataFrame, test data processed
+        X_train_processed, X_test_processed, scaler
+        or (same + preprocessors dict) when return_preprocessors=True
     """
     X_train_processed = X_train.copy()
     X_test_processed = X_test.copy()
 
-    # Identify column types
     numeric_cols = X_train.select_dtypes(include=[np.number]).columns.tolist()
     categorical_cols = X_train.select_dtypes(include=['object']).columns.tolist()
 
-    # Handle missing values in numeric columns
     numeric_imputer = SimpleImputer(strategy='median')
     X_train_processed[numeric_cols] = numeric_imputer.fit_transform(X_train[numeric_cols])
     X_test_processed[numeric_cols] = numeric_imputer.transform(X_test[numeric_cols])
 
-    # Handle missing values in categorical columns and encode
+    categorical_imputer = None
+    ohe = None
     if len(categorical_cols) > 0:
-        # Impute missing values in categorical columns first
         categorical_imputer = SimpleImputer(strategy='most_frequent')
-        X_train_processed[categorical_cols] = categorical_imputer.fit_transform(X_train_processed[categorical_cols])
-        X_test_processed[categorical_cols] = categorical_imputer.transform(X_test_processed[categorical_cols])
-        
-        # Encode categorical variables
-        ohe = OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore')
-        X_train_categorical_encoded = ohe.fit_transform(X_train_processed[categorical_cols]) 
-        X_test_categorical_encoded = ohe.transform(X_test_processed[categorical_cols])
-        
-        categorical_feature_names = ohe.get_feature_names_out(categorical_cols)
-
-        X_train_categorical_df = pd.DataFrame(
-            X_train_categorical_encoded,
-            columns=categorical_feature_names,
-            index=X_train_processed.index
+        X_train_processed[categorical_cols] = categorical_imputer.fit_transform(
+            X_train_processed[categorical_cols]
+        )
+        X_test_processed[categorical_cols] = categorical_imputer.transform(
+            X_test_processed[categorical_cols]
         )
 
-        X_test_categorical_df = pd.DataFrame(
-            X_test_categorical_encoded,
-            columns=categorical_feature_names,
-            index=X_test_processed.index
+        ohe = OneHotEncoder(drop='first', sparse_output=False, handle_unknown='ignore')
+        X_train_cat = ohe.fit_transform(X_train_processed[categorical_cols])
+        X_test_cat = ohe.transform(X_test_processed[categorical_cols])
+        cat_names = ohe.get_feature_names_out(categorical_cols)
+
+        X_train_cat_df = pd.DataFrame(
+            X_train_cat, columns=cat_names, index=X_train_processed.index
+        )
+        X_test_cat_df = pd.DataFrame(
+            X_test_cat, columns=cat_names, index=X_test_processed.index
         )
 
         X_train_processed = pd.concat([
             X_train_processed[numeric_cols].reset_index(drop=True),
-            X_train_categorical_df.reset_index(drop=True),
+            X_train_cat_df.reset_index(drop=True),
         ], axis=1)
         X_test_processed = pd.concat([
             X_test_processed[numeric_cols].reset_index(drop=True),
-            X_test_categorical_df.reset_index(drop=True),
+            X_test_cat_df.reset_index(drop=True),
         ], axis=1)
-    else: 
+    else:
         X_train_processed = X_train_processed[numeric_cols]
         X_test_processed = X_test_processed[numeric_cols]
 
-    
     scaler = None
-    if scale: 
+    if scale:
         scaler = StandardScaler()
         X_train_processed = pd.DataFrame(
             scaler.fit_transform(X_train_processed),
             columns=X_train_processed.columns,
-            index=X_train_processed.index
+            index=X_train_processed.index,
         )
         X_test_processed = pd.DataFrame(
             scaler.transform(X_test_processed),
             columns=X_test_processed.columns,
-            index=X_test_processed.index
+            index=X_test_processed.index,
         )
 
+    if return_preprocessors:
+        preprocessors = {
+            'numeric_imputer': numeric_imputer,
+            'categorical_imputer': categorical_imputer,
+            'ohe': ohe,
+            'numeric_cols': numeric_cols,
+            'categorical_cols': categorical_cols,
+        }
+        return X_train_processed, X_test_processed, scaler, preprocessors
     return X_train_processed, X_test_processed, scaler
 
 
@@ -336,3 +347,37 @@ def engineer_features(df):
             df_eng['cortisol_level'] * 10 + df_eng['heart_rate'] / 10
         )    
     return df_eng
+
+def plot_predictions(y_test, y_pred, targets):
+    fig, axes = plt.subplots(1, len(targets), figsize=(20, 5))
+    for i, col in enumerate(targets):
+        axes[i].scatter(y_test.iloc[:, i], y_pred[:, i], alpha=0.5, color='teal')
+        axes[i].plot([y_test.iloc[:, i].min(), y_test.iloc[:, i].max()], 
+                    [y_test.iloc[:, i].min(), y_test.iloc[:, i].max()], 
+                    'r--', lw=2)
+        axes[i].set_title(f'{col}')
+        axes[i].set_xlabel('Real')
+        axes[i].set_ylabel('Predicho')
+    plt.tight_layout()
+    plt.show()
+
+def plot_feature_importance(model, feature_names, top_n=15):
+    # Extract importances
+    importances = model.feature_importances_
+    
+    # Create a DataFrame for easier handling
+    feature_importance_df = pd.DataFrame({
+        'Feature': feature_names,
+        'Importance': importances
+    }).sort_values(by='Importance', ascending=False)
+    
+    # Plot
+    plt.figure(figsize=(10, 8))
+    sns.barplot(x='Importance', y='Feature', data=feature_importance_df.head(top_n), palette='viridis')
+    plt.title(f'Top {top_n} Características más Influyentes (XGBoost)')
+    plt.xlabel('Importancia (Gain)')
+    plt.ylabel('Variables')
+    plt.tight_layout()
+    plt.show()
+    
+    return feature_importance_df
