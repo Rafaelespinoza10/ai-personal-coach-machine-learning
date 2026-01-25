@@ -472,6 +472,17 @@ print("="*70)
 # Save model and scaler
 model_path, scaler_path = save_model_artifacts(best_model, best_model_scaler, MODELS_DIR)
 
+# Save preprocessors for inference (only when using all features; API stress service uses them)
+if not use_selected:
+    _, _, _, preprocessors = preprocess_data(X_train_fe, X_test_fe, scale=True, return_preprocessors=True)
+    preprocessors['base_columns'] = list(X_train.columns)
+    preprocessors['base_numeric'] = X_train.select_dtypes(include=[np.number]).columns.tolist()
+    preprocessors['base_categorical'] = X_train.select_dtypes(include=['object']).columns.tolist()
+    preprocessors_path = MODELS_DIR / 'preprocessors.pkl'
+    with open(preprocessors_path, 'wb') as f:
+        pickle.dump(preprocessors, f)
+    print(f"  - Preprocessors: {preprocessors_path}")
+
 # Save training results (include both all and selected results)
 config = {
     'random_state': RANDOM_STATE,
