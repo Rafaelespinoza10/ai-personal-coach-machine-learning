@@ -1,0 +1,91 @@
+================================================================================
+KEY WORDS BY EMOTION - SENTIMENT ANALYSIS MODEL
+================================================================================
+
+These are the words that most influence the detection of each emotion.
+Positive coefficient = word indicates that emotion
+Generated: 2026-01-20 18:44:47
+
+
+JOYFUL:
+------------------------------------------------------------
+   1. brillante                      (coef: +2.6303)
+   2. divertido                      (coef: +2.4266)
+   3. juerguista                     (coef: +2.4092)
+   4. esperanzado                    (coef: +2.3672)
+   5. animado                        (coef: +2.3065)
+   6. desvergonzado                  (coef: +2.2871)
+   7. bromista                       (coef: +2.2535)
+   8. proactivo                      (coef: +2.1509)
+   9. atrevido                       (coef: +2.1474)
+  10. imparable                      (coef: +2.1196)
+
+
+MAD:
+------------------------------------------------------------
+   1. irritado                       (coef: +2.0377)
+   2. agitado                        (coef: +1.9951)
+   3. inseguro                       (coef: +1.9841)
+   4. competitivo                    (coef: +1.9165)
+   5. compulsivo                     (coef: +1.9053)
+   6. lejano                         (coef: +1.8904)
+   7. impotente                      (coef: +1.8724)
+   8. celoso                         (coef: +1.8358)
+   9. afectado                       (coef: +1.8206)
+  10. impaciente                     (coef: +1.8111)
+
+
+PEACEFUL:
+------------------------------------------------------------
+   1. resuelto                       (coef: +1.8893)
+   2. atento                         (coef: +1.8495)
+   3. descansado                     (coef: +1.8426)
+   4. relajado                       (coef: +1.8252)
+   5. confiado                       (coef: +1.8029)
+   6. gratificante                   (coef: +1.7997)
+   7. bondadoso                      (coef: +1.7791)
+   8. amoroso                        (coef: +1.7515)
+   9. pausado                        (coef: +1.7406)
+  10. tierno                         (coef: +1.6925)
+
+
+POWERFUL:
+------------------------------------------------------------
+   1. decidido                       (coef: +2.4468)
+   2. sorprendido                    (coef: +2.2306)
+   3. competente                     (coef: +2.0736)
+   4. triunfo                        (coef: +2.0313)
+   5. cumplido                       (coef: +2.0103)
+   6. satisfactorio                  (coef: +2.0074)
+   7. estupefacto                    (coef: +2.0032)
+   8. productivo                     (coef: +2.0020)
+   9. impactado                      (coef: +1.9141)
+  10. logrado                        (coef: +1.8734)
+
+
+SAD:
+------------------------------------------------------------
+   1. pendejo                        (coef: +2.6718)
+   2. amodorrado                     (coef: +2.5740)
+   3. abandonado                     (coef: +2.5439)
+   4. soltero                        (coef: +2.4502)
+   5. enredado                       (coef: +2.4263)
+   6. agotado                        (coef: +2.3556)
+   7. desamparado                    (coef: +2.3552)
+   8. somnoliento                    (coef: +2.3175)
+   9. desorientador                  (coef: +2.2656)
+  10. fatigado                       (coef: +2.2425)
+
+
+SCARED:
+------------------------------------------------------------
+   1. incapacitado                   (coef: +2.6420)
+   2. desbordante                    (coef: +2.5671)
+   3. confundido                     (coef: +2.5405)
+   4. autoconsciente                 (coef: +2.5120)
+   5. desbordado                     (coef: +2.3805)
+   6. preocupado                     (coef: +2.3681)
+   7. sobrecargado                   (coef: +2.2981)
+   8. colapsado                      (coef: +2.2688)
+   9. desconcertado                  (coef: +2.2429)
+  10. incómodo                       (coef: +2.1956)
