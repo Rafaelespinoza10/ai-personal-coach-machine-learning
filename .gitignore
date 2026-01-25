@@ -46,6 +46,7 @@ models/**/*.h5
 models/**/*.joblib
 models/**/*.pt
 models/**/*.pth
+models/**/*.json
 
 # Mantener estructura pero no los archivos grandes
 !models/.gitkeep
@@ -76,6 +77,7 @@ datasets/final/*.csv
 # ============================================
 models/shap_analysis/
 models/training_results.json
+models/sentiment/model_config.json
 
 # ============================================
 # Archivos del sistema
