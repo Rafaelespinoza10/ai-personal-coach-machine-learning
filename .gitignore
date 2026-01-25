@@ -47,6 +47,9 @@ models/**/*.joblib
 models/**/*.pt
 models/**/*.pth
 models/**/*.png
+models/*.pkl
+models/*.joblib
+models/*.h5
 
 # Ignorar JSON excepto model_config.json (pequeños y útiles)
 models/**/*.json
@@ -131,3 +134,12 @@ dmypy.json
 config.local.py
 secrets.json
 
+# Credenciales de AWS y archivos de configuración
+.aws/
+credentials
+credentials.csv
+accessKeys.csv
+
+# Docker
+.docker/
+*.tar
