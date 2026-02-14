@@ -3,6 +3,7 @@ import os
 import sys
 from pathlib import Path
 from dotenv import load_dotenv
+from botocore.config import Config
 
 script_dir = Path(__file__).resolve().parent
 project_root = script_dir.parent.parent
@@ -25,7 +26,7 @@ def download_models():
         s3 = boto3.client(
             's3',
             region_name=region,
-            config=boto3.session.Config(
+            config=Config(
                 retries={'max_attempts': 2, 'mode': 'standard'},
                 max_pool_connections=10,
             )
