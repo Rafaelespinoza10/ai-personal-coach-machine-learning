@@ -84,6 +84,10 @@ class StressResponse(BaseModel):
 class UserCreate(BaseModel):
     email: str = Field(..., min_length=3)
     password: str = Field(..., min_length=6)
+    full_name: str = Field(..., min_length=1, description="Nombre completo")
+    age: int = Field(..., ge=1, le=150, description="Edad")
+    gender: str = Field(..., min_length=1, description="Género (ej. Male, Female, Non-binary)")
+    occupation: str = Field(..., min_length=1, description="Ocupación (ej. University Student, Salaried Worker)")
 
 class UserLogin(BaseModel):
     email: str = Field(...)
@@ -97,4 +101,8 @@ class TokenResponse(BaseModel):
 class UserResponse(BaseModel):
     id: str
     email: str
+    full_name: Optional[str] = None
+    age: Optional[int] = None
+    gender: Optional[str] = None
+    occupation: Optional[str] = None
     created_at: Optional[str] = None

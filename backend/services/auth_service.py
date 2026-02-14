@@ -39,14 +39,31 @@ def decode_token(token: str) -> str | None:
         return None
 
 
-def create_user(conn, email: str, password: str) -> tuple[str, str]:
-    """Crea usuario, retorna (user_id, password_hash)."""
+def create_user(
+    conn,
+    email: str,
+    password: str,
+    full_name: str,
+    age: int,
+    gender: str,
+    occupation: str,
+) -> tuple[str, str]:
+    """Crea usuario con perfil (nombre, edad, género, ocupación). Retorna (user_id, password_hash)."""
     user_id = str(uuid.uuid4())
     password_hash = hash_password(password)
     with conn.cursor() as cur:
         cur.execute(
-            "INSERT INTO users (id, email, password_hash) VALUES (%s, %s, %s)",
-            (user_id, email.strip().lower(), password_hash),
+            """INSERT INTO users (id, email, password_hash, full_name, age, gender, occupation)
+               VALUES (%s, %s, %s, %s, %s, %s, %s)""",
+            (
+                user_id,
+                email.strip().lower(),
+                password_hash,
+                (full_name or "").strip(),
+                age,
+                (gender or "").strip(),
+                (occupation or "").strip(),
+            ),
         )
     conn.commit()
     return user_id, password_hash

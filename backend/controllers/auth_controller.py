@@ -12,7 +12,15 @@ def register(data: UserCreate, conn=Depends(get_db)):
     existing = auth_service.get_user_by_email(conn, data.email)
     if existing:
         raise HTTPException(status_code=400, detail="El email ya está registrado")
-    user_id, _ = auth_service.create_user(conn, data.email, data.password)
+    user_id, _ = auth_service.create_user(
+        conn,
+        data.email,
+        data.password,
+        full_name=data.full_name,
+        age=data.age,
+        gender=data.gender,
+        occupation=data.occupation,
+    )
     access_token = auth_service.create_access_token(user_id)
     return TokenResponse(access_token=access_token, user_id=user_id)
 
