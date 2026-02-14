@@ -3,7 +3,7 @@ from urllib.parse import urlparse
 
 from fastapi import FastAPI, Depends, HTTPException
 from backend.models_loader import model_server
-from backend.controllers import sentiment_controller, health_controller, main_controller
+from backend.controllers import sentiment_controller, health_controller, main_controller, auth_controller
 from backend.config.database import close_pool, get_db, get_pool
 from backend.config.settings import settings
 
@@ -20,6 +20,7 @@ async def lifespan(app: FastAPI):
 
 app = FastAPI(title="AI Performance Coach API", lifespan=lifespan)
 
+app.include_router(auth_controller.router)
 app.include_router(sentiment_controller.router)
 app.include_router(health_controller.router)
 app.include_router(main_controller.router)

@@ -78,3 +78,23 @@ class StressResponse(BaseModel):
     message: str = Field(..., description="Interpretación en lenguaje natural")
     recommendation: str = Field(..., description="Recomendación breve y accionable")
     display_metadata: Optional[DisplayMetadata] = None
+
+
+# Auth
+class UserCreate(BaseModel):
+    email: str = Field(..., min_length=3)
+    password: str = Field(..., min_length=6)
+
+class UserLogin(BaseModel):
+    email: str = Field(...)
+    password: str = Field(...)
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user_id: str
+
+class UserResponse(BaseModel):
+    id: str
+    email: str
+    created_at: Optional[str] = None
